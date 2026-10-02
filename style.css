@@ -1,0 +1,235 @@
+/* ---------- Токены ---------- */
+:root {
+  --bg: #0a0f0d;
+  --steel: #2b3b35;
+  --bone: #d3e3d9;
+  --bone-dim: #8fa89a;
+  --mint: #5af2c2;
+  --rust: #d9654a;
+  --amber: #e3a94f;
+
+  --font-term: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --font-human: "Cormorant", "Iowan Old Style", Georgia, serif;
+
+  /* Неровные «костные» углы рамки: у каждого угла свой изгиб */
+  --shape: 3rem 7rem 3.5rem 6rem / 4rem 3.5rem 6rem 3rem;
+  --shape-inner: 2.4rem 6.4rem 3rem 5.4rem / 3.4rem 3rem 5.4rem 2.4rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: radial-gradient(120% 90% at 50% 30%, #111b17 0%, var(--bg) 62%);
+  color: var(--bone);
+  font: 400 1rem/1.7 var(--font-term);
+}
+
+/* ---------- Фон: жилы ---------- */
+.veins {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.vein { fill: none; stroke: var(--mint); stroke-linecap: round; }
+.vein--thin  { stroke-width: 1;   opacity: .28; stroke-dasharray: 3 11;  animation: flow 18s linear infinite; }
+.vein--thick { stroke-width: 2.5; opacity: .08; stroke-dasharray: 60 40; animation: flow 26s linear infinite reverse; }
+@keyframes flow { to { stroke-dashoffset: -400; } }
+
+/* ---------- Сцена и рамка ---------- */
+.stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: clamp(1rem, 4vw, 3rem);
+}
+
+.chamber {
+  position: relative;
+  width: min(100%, 44rem);
+  padding: clamp(1.75rem, 5vw, 3.25rem);
+  background: linear-gradient(160deg, rgba(15, 23, 20, .93), rgba(10, 15, 13, .97));
+  border: 1px solid var(--steel);
+  border-radius: var(--shape);
+  box-shadow: 0 0 2.5rem rgba(90, 242, 194, .08), inset 0 0 3rem rgba(90, 242, 194, .04);
+  animation: breathe 6s ease-in-out infinite;
+}
+
+/* Рёбра: еле видная штриховка, гаснет к низу */
+.chamber::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(100deg, transparent 0 14px, rgba(90, 242, 194, .045) 14px 15px);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 70%);
+          mask-image: linear-gradient(to bottom, #000, transparent 70%);
+  pointer-events: none;
+}
+
+/* Второй контур: как пластина поверх основной рамки */
+.chamber::after {
+  content: "";
+  position: absolute;
+  inset: .6rem;
+  z-index: 0;
+  border: 1px solid rgba(90, 242, 194, .14);
+  border-radius: var(--shape-inner);
+  pointer-events: none;
+}
+
+.chamber > * { position: relative; z-index: 1; }
+
+@keyframes breathe {
+  50% { box-shadow: 0 0 3.5rem rgba(90, 242, 194, .17), inset 0 0 4rem rgba(90, 242, 194, .08); }
+}
+
+/* ---------- Шапка ---------- */
+.head { margin-bottom: 1.75rem; }
+
+.signal {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--mint);
+}
+
+.status {
+  position: relative;
+  margin: .15rem 0 0;
+  padding-left: 1.1rem;
+  font-size: .875rem;
+  color: var(--bone-dim);
+}
+.status::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .55em;
+  width: .5rem;
+  height: .5rem;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* ---------- Лог: вход на загрузке ---------- */
+.log p {
+  max-width: 62ch;
+  margin: 0 0 .4rem;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  animation: scan .9s steps(28, end) forwards;
+  animation-delay: calc(var(--i, 0) * .8s + .4s);
+}
+.log p::before { content: "> "; color: var(--mint); }
+@keyframes scan { to { opacity: 1; clip-path: inset(0); } }
+
+/* ---------- Ввод ---------- */
+.prompt { display: grid; gap: .5rem; margin-top: 2rem; }
+
+.prompt label { font-size: .875rem; color: var(--bone-dim); }
+
+.prompt__row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: end; }
+
+.prompt input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding: .6rem .25rem;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--steel);
+  color: var(--mint);
+  caret-color: var(--mint);
+  font: inherit;
+  font-size: 1.125rem;
+  letter-spacing: .04em;
+}
+
+.prompt button {
+  padding: .6rem 1.5rem;
+  background: rgba(90, 242, 194, .08);
+  border: 1px solid var(--mint);
+  border-radius: 1.4rem .6rem 1.6rem .6rem / .8rem 1.2rem .6rem 1.4rem;
+  color: var(--mint);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+.prompt button:hover { background: rgba(90, 242, 194, .18); }
+
+.prompt input:focus-visible,
+.prompt button:focus-visible,
+.hint summary:focus-visible {
+  outline: 2px solid var(--mint);
+  outline-offset: 4px;
+}
+
+.hint { margin-top: .75rem; font-size: .875rem; color: var(--bone-dim); }
+.hint summary { width: fit-content; cursor: pointer; text-decoration: underline; text-underline-offset: .25em; }
+.hint p { max-width: 62ch; margin: .5rem 0 0; }
+
+/* ---------- Состояния ответа ----------
+   JS добавляет .is-correct или .is-wrong на .chamber
+   и убирает класс по событию animationend */
+.chamber.is-correct { animation: accept .9s ease-out 1; }
+.chamber.is-wrong   { animation: reject .45s ease-in-out 1; }
+
+@keyframes accept {
+  0%   { box-shadow: 0 0 5rem rgba(90, 242, 194, .5), inset 0 0 5rem rgba(90, 242, 194, .25); border-color: var(--mint); }
+  100% { box-shadow: 0 0 2.5rem rgba(90, 242, 194, .08), inset 0 0 3rem rgba(90, 242, 194, .04); }
+}
+@keyframes reject {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); box-shadow: 0 0 3rem rgba(217, 101, 74, .45); border-color: var(--rust); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(2px); }
+}
+
+/* ---------- Финал ----------
+   Показывается по адресу #final, позже включим из JS классом */
+.chamber--final { display: none; }
+.chamber--final:target { display: block; }
+body:has(.chamber--final:target) #gate { display: none; }
+body:has(.chamber--final:target) .vein { animation-duration: 60s; }
+
+.final__label { margin: 0 0 1.75rem; font-size: .875rem; color: var(--bone-dim); }
+
+.final__text p {
+  max-width: 44ch;
+  margin: 0 0 1.25rem;
+  font-family: var(--font-human);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2.8vw, 1.5rem);
+  line-height: 1.5;
+  animation: dawn 3s ease-out both;
+  animation-delay: calc(var(--i, 0) * 2.2s + .6s);
+}
+@keyframes dawn { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: blur(0); } }
+
+/* ---------- Телефоны ---------- */
+@media (max-width: 32rem) {
+  :root {
+    --shape: 2rem 3.5rem 2.25rem 3rem / 2.5rem 2rem 3.5rem 2rem;
+    --shape-inner: 1.5rem 3rem 1.75rem 2.5rem / 2rem 1.5rem 3rem 1.5rem;
+  }
+}
+
+/* ---------- Уменьшенное движение ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .log p { opacity: 1; clip-path: none; }
+  .final__text p { opacity: 1; filter: none; }
+}

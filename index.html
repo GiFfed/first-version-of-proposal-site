@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Входящий сигнал</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Фон: «жилы». Общий для всех экранов, на финале замедляется -->
+  <svg class="veins" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path class="vein vein--thick" d="M-20 120 C 220 60, 300 260, 520 220 S 860 40, 1220 180"/>
+    <path class="vein vein--thin"  d="M-20 120 C 220 60, 300 260, 520 220 S 860 40, 1220 180"/>
+    <path class="vein vein--thick" d="M-20 700 C 180 640, 330 760, 560 690 S 940 560, 1220 640"/>
+    <path class="vein vein--thin"  d="M-20 700 C 180 640, 330 760, 560 690 S 940 560, 1220 640"/>
+    <path class="vein vein--thin"  d="M300 -20 C 260 180, 420 320, 380 520 S 300 720, 360 820"/>
+    <path class="vein vein--thin"  d="M900 -20 C 960 160, 820 300, 900 480 S 1040 700, 980 820"/>
+  </svg>
+
+  <main class="stage">
+
+    <!-- Экран этапа. Тексты и ответы потом будут приходить из script.js -->
+    <section class="chamber" id="gate" aria-labelledby="gate-title">
+      <header class="head">
+        <h1 class="signal" id="gate-title">Входящий сигнал</h1>
+        <p class="status">Источник не определён</p>
+      </header>
+
+      <div class="log" aria-live="polite">
+        <p style="--i:0">Связь восстановлена.</p>
+        <p style="--i:1">Найден закрытый канал. Для доступа нужен код.</p>
+        <p style="--i:2">Код записан на бумажном носителе.</p>
+      </div>
+
+      <form class="prompt" onsubmit="return false" autocomplete="off">
+        <label for="code">Код доступа</label>
+        <div class="prompt__row">
+          <input id="code" name="code" type="text" spellcheck="false" autocapitalize="off">
+          <button type="submit">Ввести</button>
+        </div>
+        <details class="hint">
+          <summary>Нужна подсказка?</summary>
+          <p>[11920102030121]</p>
+        </details>
+      </form>
+    </section>
+
+    <!-- Финал. Для просмотра макета откройте index.html#final -->
+    <section class="chamber chamber--final" id="final" aria-labelledby="final-title">
+  <p class="final__label" id="final-title">Сообщение расшифровано.</p>
+  <div class="final__text">
+    <p style="--i:0">До этого момента я никогда никому не делал ничего подобного.</p>
+    <p style="--i:1">Как ты догадалась, фанатик культа — это я. Я сижу рядом и наблюдаю за твоими эмоциями от моей работы.</p>
+    <p style="--i:2">Каждый раз, когда я смотрю на тебя, я вижу много улыбки и доброты в твоих глазах. Я хотел сказать тебе это ещё в субботу, но не решился: думал, что тебя это напугает.</p>
+    <p style="--i:3">Мне нравится то, чем ты увлечена. Хоть я и не всё в этом понимаю, то, как ты рассказываешь мне о своих увлечениях, делает их интересными и для меня. Мне нравится твоя разговорчивость, то, как ты выражаешь эмоции, как ты смотришь на меня. Твои истории вдохновляют меня.</p>
+    <p style="--i:4">Я очень боюсь это писать, но ты мне нравишься. Я испытываю тёплые чувства, когда ты рядом. Это похоже на тёплый кофе по утрам со вкусным завтраком. Я давно такого не испытывал.</p>
+    <p style="--i:5">Ты не должна отвечать сразу. Я понимаю, что это неожиданно, и пойму, если ты не чувствуешь того же. Я просто хотел, чтобы ты это знала.</p>
+  </div>
+</section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
